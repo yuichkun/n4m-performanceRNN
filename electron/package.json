@@ -1,0 +1,23 @@
+{
+  "name": "electron-performanceRNN",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "build": "webpack",
+    "start": "electron ."
+  },
+  "author": "Yuichi Yogo",
+  "license": "ISC",
+  "devDependencies": {
+    "ts-loader": "^5.2.1",
+    "typescript": "^3.1.3",
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.2"
+  },
+  "dependencies": {
+    "@tensorflow/tfjs-core": "^0.8.0",
+    "electron": "^3.0.4",
+    "tone-piano": "0.0.12"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "n4m-electron",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./electron",
+  "scripts": {
+    "build": "tsc",
+    "bundle": "browserify --standalone performance_rnn performance_rnn.ts -p [tsify] > bundle.js", 
+    "pre-install": "cd ./electron; npm install",
+    "setup": "npm install; npm run pre-install; "
+  },
+  "author": "Yuichi Yogo",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^3.0.1",
+    "socket.io": "^2.1.1"
+  },
+  "dependencies": {
+  }
+}
