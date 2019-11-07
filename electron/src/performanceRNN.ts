@@ -97,22 +97,13 @@ const EVENT_SIZE = calculateEventSize();
 const PRIMER_IDX = 355;  // shift 1s.
 let lastSample = tf.scalar(PRIMER_IDX, 'int32');
 
-const container = document.querySelector('#keyboard');
-const keyboardInterface = new KeyboardElement(container);
-
-const piano = new Piano({velocities: 4}).toMaster();
-
-const SALAMANDER_URL = 'https://storage.googleapis.com/' +
-    'download.magenta.tensorflow.org/demos/SalamanderPiano/';
 const CHECKPOINT_URL = 'https://storage.googleapis.com/' +
     'download.magenta.tensorflow.org/models/performance_rnn/tfjs';
 
 const isDeviceSupported = tf.ENV.get('WEBGL_VERSION') >= 1;
 
 if (!isDeviceSupported) {
-  document.querySelector('#status').innerHTML =
-      'We do not yet support your device. Please try on a desktop ' +
-      'computer with Chrome/Firefox, or an Android phone with WebGL support.';
+  throw new Error('device is not supported')
 } else {
   start();
 }
@@ -179,101 +170,14 @@ function resetRnn() {
   generateStep(currentLoopId);
 }
 
-window.addEventListener('resize', resize);
 
-function resize() {
-  keyboardInterface.resize();
-}
+updateConditioningParams();
 
-resize();
-
-const densityControl =
-    document.getElementById('note-density') as HTMLInputElement;
-const densityDisplay = document.getElementById('note-density-display');
-const conditioningOffElem =
-    document.getElementById('conditioning-off') as HTMLInputElement;
-conditioningOffElem.onchange = disableConditioning;
-const conditioningOnElem =
-    document.getElementById('conditioning-on') as HTMLInputElement;
-conditioningOnElem.onchange = enableConditioning;
-setTimeout(() => disableConditioning());
-
-const conditioningControlsElem =
-    document.getElementById('conditioning-controls') as HTMLDivElement;
-
-const gainSliderElement = document.getElementById('gain') as HTMLInputElement;
-const gainDisplayElement =
-    document.getElementById('gain-display') as HTMLSpanElement;
-let globalGain = +gainSliderElement.value;
-gainDisplayElement.innerText = globalGain.toString();
-gainSliderElement.addEventListener('input', () => {
-  globalGain = +gainSliderElement.value;
-  gainDisplayElement.innerText = globalGain.toString();
-});
 
 const notes = ['c', 'cs', 'd', 'ds', 'e', 'f', 'fs', 'g', 'gs', 'a', 'as', 'b'];
 
-const pitchHistogramElements = notes.map(
-    note => document.getElementById('pitch-' + note) as HTMLInputElement);
-const histogramDisplayElements = notes.map(
-    note => document.getElementById('hist-' + note) as HTMLDivElement);
-
 let preset1 = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 let preset2 = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
-
-try {
-  parseHash();
-} catch (e) {
-  // If we didn't successfully parse the hash, we can just use defaults.
-  console.warn(e);
-}
-
-function parseHash() {
-  if (!window.location.hash) {
-    return;
-  }
-  const params = window.location.hash.substr(1).split('|');
-  densityControl.value = params[0];
-  const pitches = params[1].split(',');
-  for (let i = 0; i < pitchHistogramElements.length; i++) {
-    pitchHistogramElements[i].value = pitches[i];
-  }
-  const preset1Values = params[2].split(',');
-  for (let i = 0; i < preset1.length; i++) {
-    preset1[i] = parseInt(preset1Values[i], 10);
-  }
-  const preset2Values = params[3].split(',');
-  for (let i = 0; i < preset2.length; i++) {
-    preset2[i] = parseInt(preset2Values[i], 10);
-  }
-  if (params[4] === 'true') {
-    enableConditioning();
-
-  } else if (params[4] === 'false') {
-    disableConditioning();
-  }
-}
-
-function enableConditioning() {
-  conditioned = true;
-  conditioningOffElem.checked = false;
-  conditioningOnElem.checked = true;
-
-  conditioningControlsElem.classList.remove('inactive');
-  conditioningControlsElem.classList.remove('midicondition');
-
-  updateConditioningParams();
-}
-function disableConditioning() {
-  conditioned = false;
-  conditioningOffElem.checked = true;
-  conditioningOnElem.checked = false;
-
-  conditioningControlsElem.classList.add('inactive');
-  conditioningControlsElem.classList.remove('midicondition');
-
-  updateConditioningParams();
-}
 
 function updateConditioningParams() {
   const pitchHistogram = pitchHistogramElements.map(e => {
@@ -286,14 +190,7 @@ function updateConditioningParams() {
     noteDensityEncoding = null;
   }
 
-  window.location.assign(
-      '#' + densityControl.value + '|' + pitchHistogram.join(',') + '|' +
-      preset1.join(',') + '|' + preset2.join(',') + '|' +
-      (conditioned ? 'true' : 'false'));
-
-  const noteDensityIdx = parseInt(densityControl.value, 10) || 0;
   const noteDensity = DENSITY_BIN_RANGES[noteDensityIdx];
-  densityDisplay.innerHTML = noteDensity.toString();
 
   noteDensityEncoding =
       tf.oneHot(
@@ -318,7 +215,7 @@ document.getElementById('note-density').oninput = updateConditioningParams;
 pitchHistogramElements.forEach(e => {
   e.oninput = updateConditioningParams;
 });
-updateConditioningParams();
+
 
 function updatePitchHistogram(newHist: number[]) {
   let allZero = true;
@@ -345,26 +242,6 @@ function updateDisplayHistogram(hist: number[]) {
         (100 * (hist[i] / sum)).toString() + 'px';
   }
 }
-
-document.getElementById('c-major').onclick = () => {
-  updatePitchHistogram([2, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1]);
-};
-
-document.getElementById('f-major').onclick = () => {
-  updatePitchHistogram([1, 0, 1, 0, 1, 2, 0, 1, 0, 1, 1, 0]);
-};
-
-document.getElementById('d-minor').onclick = () => {
-  updatePitchHistogram([1, 0, 2, 0, 1, 1, 0, 1, 0, 1, 1, 0]);
-};
-
-document.getElementById('whole-tone').onclick = () => {
-  updatePitchHistogram([1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]);
-};
-
-document.getElementById('pentatonic').onclick = () => {
-  updatePitchHistogram([0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0]);
-};
 
 document.getElementById('reset-rnn').onclick = () => {
   resetRnn();
@@ -395,8 +272,6 @@ document.getElementById('save-2').onclick = () => {
 function getConditioning(): tf.Tensor1D {
   return tf.tidy(() => {
     if (!conditioned) {
-      // TODO(nsthorat): figure out why we have to cast these shapes to numbers.
-      // The linter is complaining, though VSCode can infer the types.
       const size = 1 + (noteDensityEncoding.shape[0] as number) +
           (pitchHistogramEncoding.shape[0] as number);
       const conditioning: tf.Tensor1D =
@@ -703,16 +578,10 @@ function playOutput(index: number) {
 
 // Reset the RNN repeatedly so it doesn't trail off into incoherent musical
 // babble.
-const resettingText = document.getElementById('resettingText');
 function resetRnnRepeatedly() {
   if (modelReady) {
     resetRnn();
-    resettingText.style.opacity = '100';
   }
-
-  setTimeout(() => {
-    resettingText.style.opacity = '0';
-  }, 1000);
   setTimeout(resetRnnRepeatedly, RESET_RNN_FREQUENCY_MS);
 }
 setTimeout(resetRnnRepeatedly, RESET_RNN_FREQUENCY_MS);
