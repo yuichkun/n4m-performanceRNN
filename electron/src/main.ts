@@ -27,13 +27,16 @@ function getInitialWeights(models: Models): tf.Tensor<tf.Rank.R2>[]{
 }
 
 // TODO: add logger
-class PerformanceRnn {
+export default class PerformanceRnn {
   cellState: tf.Tensor2D[] 
   hiddenState: tf.Tensor2D[] 
   lastSample: tf.Tensor<tf.Rank.R0> | null
   currentLoopId: number
   models: Models
   currentPianoTimeSec: number
+  conditioned: boolean = false;
+  noteDensityEncoding: tf.Tensor1D;
+  pitchHistogramEncoding: tf.Tensor1D;
 
   /** @description
    * How many steps to generate per generateStep call.
@@ -107,8 +110,7 @@ class PerformanceRnn {
           this.lastSample.dispose();
         }
 
-        // TODO: get conditioning
-        // const conditioning = getConditioning();
+        const conditioning = this.getConditioning();
         const axis = 0;
         const input = conditioning.concat(eventInput, axis).toFloat();
         const output =
@@ -153,6 +155,22 @@ class PerformanceRnn {
 
   // TODO: implement this
   playOutput(index: number){}
+
+  getConditioning(): tf.Tensor1D {
+    return tf.tidy(() => {
+      const { conditioned, noteDensityEncoding, pitchHistogramEncoding } = this;
+      if (!conditioned) {
+        const size = 1 + (noteDensityEncoding.shape[0] as number) +
+            (pitchHistogramEncoding.shape[0] as number);
+        const conditioning: tf.Tensor1D =
+            tf.oneHot(tf.tensor1d([0], 'int32'), size).as1D();
+        return conditioning;
+      } else {
+        const axis = 0;
+        const conditioningValues =
+            noteDensityEncoding.concat(pitchHistogramEncoding, axis);
+        return tf.tensor1d([0], 'int32').concat(conditioningValues, axis);
+      }
+    });
+  }
 }
-
-
