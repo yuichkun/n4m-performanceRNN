@@ -35,12 +35,33 @@ describe('App', () => {
       expect(App).toBeDefined()
       expect(app).toBeInstanceOf(App)
     })
-    it('models are set', () => {
-      expect(app.models).toBeDefined()
-      expect(app.models).toMatchSnapshot()
+    it('cellState has initialState', () => {
+      expect(app.cellState).toMatchSnapshot()
+    })
+    it('hiddenState has initialState', () => {
+      expect(app.hiddenState).toMatchSnapshot()
+    })
+    it('lastSample is not null', () => {
+      expect(app.lastSample).toMatchSnapshot()
+    })
+    it('currentLoopId is 0', () => {
+      expect(app.currentLoopId).toBe(0)
+    })
+    it('currentPianoTimeSec is 0', () => {
+      expect(app.currentPianoTimeSec).toBe(0)
     })
     it('conditioned is set false', () => {
       expect(app.conditioned).toBe(false)
+    })
+    it('noteDensityEncoding is null', () => { 
+      expect(app.noteDensityEncoding).toBeNull()
+    })
+    it('pitchHistogramEncoding is null', () => { 
+      expect(app.pitchHistogramEncoding).toBeNull()
+   })
+    it('models are set', () => {
+      expect(app.models).toBeDefined()
+      expect(app.models).toMatchSnapshot()
     })
   })
 

@@ -1,5 +1,125 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`App constructor cellState has initialState 1`] = `
+Array [
+  Tensor {
+    "dataId": Object {},
+    "dtype": "float32",
+    "id": 33,
+    "isDisposedInternal": false,
+    "kept": false,
+    "rankType": "2",
+    "shape": Array [
+      1,
+      512,
+    ],
+    "size": 512,
+    "strides": Array [
+      512,
+    ],
+  },
+  Tensor {
+    "dataId": Object {},
+    "dtype": "float32",
+    "id": 34,
+    "isDisposedInternal": false,
+    "kept": false,
+    "rankType": "2",
+    "shape": Array [
+      1,
+      512,
+    ],
+    "size": 512,
+    "strides": Array [
+      512,
+    ],
+  },
+  Tensor {
+    "dataId": Object {},
+    "dtype": "float32",
+    "id": 35,
+    "isDisposedInternal": false,
+    "kept": false,
+    "rankType": "2",
+    "shape": Array [
+      1,
+      512,
+    ],
+    "size": 512,
+    "strides": Array [
+      512,
+    ],
+  },
+]
+`;
+
+exports[`App constructor hiddenState has initialState 1`] = `
+Array [
+  Tensor {
+    "dataId": Object {},
+    "dtype": "float32",
+    "id": 43,
+    "isDisposedInternal": false,
+    "kept": false,
+    "rankType": "2",
+    "shape": Array [
+      1,
+      512,
+    ],
+    "size": 512,
+    "strides": Array [
+      512,
+    ],
+  },
+  Tensor {
+    "dataId": Object {},
+    "dtype": "float32",
+    "id": 44,
+    "isDisposedInternal": false,
+    "kept": false,
+    "rankType": "2",
+    "shape": Array [
+      1,
+      512,
+    ],
+    "size": 512,
+    "strides": Array [
+      512,
+    ],
+  },
+  Tensor {
+    "dataId": Object {},
+    "dtype": "float32",
+    "id": 45,
+    "isDisposedInternal": false,
+    "kept": false,
+    "rankType": "2",
+    "shape": Array [
+      1,
+      512,
+    ],
+    "size": 512,
+    "strides": Array [
+      512,
+    ],
+  },
+]
+`;
+
+exports[`App constructor lastSample is not null 1`] = `
+Tensor {
+  "dataId": Object {},
+  "dtype": "int32",
+  "id": 53,
+  "isDisposedInternal": false,
+  "kept": false,
+  "rankType": "0",
+  "shape": Array [],
+  "size": 1,
+  "strides": Array [],
+}
+`;
+
 exports[`App constructor models are set 1`] = `
 Object {
   "fcB": Tensor {
@@ -128,7 +248,7 @@ Array [
   Tensor {
     "dataId": Object {},
     "dtype": "float32",
-    "id": 9,
+    "id": 16,
     "isDisposedInternal": false,
     "kept": false,
     "rankType": "2",
@@ -144,7 +264,7 @@ Array [
   Tensor {
     "dataId": Object {},
     "dtype": "float32",
-    "id": 10,
+    "id": 17,
     "isDisposedInternal": false,
     "kept": false,
     "rankType": "2",
@@ -160,7 +280,7 @@ Array [
   Tensor {
     "dataId": Object {},
     "dtype": "float32",
-    "id": 11,
+    "id": 18,
     "isDisposedInternal": false,
     "kept": false,
     "rankType": "2",
