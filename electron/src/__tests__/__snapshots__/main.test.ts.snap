@@ -1,0 +1,122 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`App constructor models are set 1`] = `
+Object {
+  "fcB": Tensor {
+    "dataId": Object {},
+    "dtype": "float32",
+    "id": 6,
+    "isDisposedInternal": false,
+    "kept": false,
+    "rankType": "1",
+    "shape": Array [
+      388,
+    ],
+    "size": 388,
+    "strides": Array [],
+  },
+  "fcW": Tensor {
+    "dataId": Object {},
+    "dtype": "float32",
+    "id": 3,
+    "isDisposedInternal": false,
+    "kept": false,
+    "rankType": "2",
+    "shape": Array [
+      512,
+      388,
+    ],
+    "size": 198656,
+    "strides": Array [
+      388,
+    ],
+  },
+  "lstmBias1": Tensor {
+    "dataId": Object {},
+    "dtype": "float32",
+    "id": 7,
+    "isDisposedInternal": false,
+    "kept": false,
+    "rankType": "1",
+    "shape": Array [
+      2048,
+    ],
+    "size": 2048,
+    "strides": Array [],
+  },
+  "lstmBias2": Tensor {
+    "dataId": Object {},
+    "dtype": "float32",
+    "id": 2,
+    "isDisposedInternal": false,
+    "kept": false,
+    "rankType": "1",
+    "shape": Array [
+      2048,
+    ],
+    "size": 2048,
+    "strides": Array [],
+  },
+  "lstmBias3": Tensor {
+    "dataId": Object {},
+    "dtype": "float32",
+    "id": 5,
+    "isDisposedInternal": false,
+    "kept": false,
+    "rankType": "1",
+    "shape": Array [
+      2048,
+    ],
+    "size": 2048,
+    "strides": Array [],
+  },
+  "lstmKernel1": Tensor {
+    "dataId": Object {},
+    "dtype": "float32",
+    "id": 1,
+    "isDisposedInternal": false,
+    "kept": false,
+    "rankType": "2",
+    "shape": Array [
+      921,
+      2048,
+    ],
+    "size": 1886208,
+    "strides": Array [
+      2048,
+    ],
+  },
+  "lstmKernel2": Tensor {
+    "dataId": Object {},
+    "dtype": "float32",
+    "id": 4,
+    "isDisposedInternal": false,
+    "kept": false,
+    "rankType": "2",
+    "shape": Array [
+      1024,
+      2048,
+    ],
+    "size": 2097152,
+    "strides": Array [
+      2048,
+    ],
+  },
+  "lstmKernel3": Tensor {
+    "dataId": Object {},
+    "dtype": "float32",
+    "id": 8,
+    "isDisposedInternal": false,
+    "kept": false,
+    "rankType": "2",
+    "shape": Array [
+      1024,
+      2048,
+    ],
+    "size": 2097152,
+    "strides": Array [
+      2048,
+    ],
+  },
+}
+`;

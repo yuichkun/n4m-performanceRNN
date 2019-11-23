@@ -14,10 +14,10 @@ limitations under the License.
 ==============================================================================*/
 
 import * as tf from '@tensorflow/tfjs-node'
-import {loadModel, Models} from './modelLoader'
+import { Models } from './modelLoader'
 import { EVENT_SIZE } from './constants'
 
-function getInitialWeights(models: Models): tf.Tensor<tf.Rank.R2>[]{
+export function getInitialWeights(models: Models): tf.Tensor<tf.Rank.R2>[]{
   const { lstmBias1, lstmBias2, lstmBias3 } = models
   return [
     tf.zeros([1, lstmBias1.shape[0] / 4]),
@@ -56,18 +56,12 @@ export default class PerformanceRnn {
    */
   static GENERATION_BUFFER_SECONDS = .5;
 
-  constructor() {
-    this.initialize()
+  constructor(models: Models) {
+    this.models = models
   }
 
   async initialize() {
-    try {
-      this.models = await loadModel()
-      this.currentLoopId = 0
-    } catch (e) {
-      console.error("Failed Initializing")
-      throw e
-    }
+    this.currentLoopId = 0
   }
   
   resetRnn() {
@@ -97,7 +91,8 @@ export default class PerformanceRnn {
     const lstm3 = (data: tf.Tensor2D, c: tf.Tensor2D, h: tf.Tensor2D) =>
         tf.basicLSTMCell(PerformanceRnn.forgetBias, lstmKernel3, lstmBias3, data, c, h);
 
-    const [c, h, outputs] = tf.tidy(() => {
+    // @ts-ignore
+    const [_, __, outputs] = tf.tidy(() => {
       // Generate some notes.
       const innerOuts: tf.Scalar[] = [];
       for (let i = 0; i < PerformanceRnn.STEPS_PER_GENERATE_CALL; i++) {
@@ -109,7 +104,6 @@ export default class PerformanceRnn {
         if (i === 0) {
           this.lastSample.dispose();
         }
-
         const conditioning = this.getConditioning();
         const axis = 0;
         const input = conditioning.concat(eventInput, axis).toFloat();
