@@ -72,5 +72,22 @@ describe('App', () => {
       await app.initialize()
       expect(app.currentLoopId).toBe(0)
     })
+    it('calls updateConditioningParams', async () => {
+      const mock = jest.fn()
+      app.updateConditioningParams = mock
+      await app.initialize()
+      expect(mock).toHaveBeenCalledTimes(1)
+    })
+  })
+  describe('updateConditioningParams', () => {
+    beforeEach(() => {
+      app.updateConditioningParams()
+    })
+    it('sets noteDensityEncoding', () => {
+      expect(app.noteDensityEncoding).not.toBeNull()
+    })
+    it('sets pitchHistogramEncoding', () => {
+      expect(app.pitchHistogramEncoding).not.toBeNull()
+    })
   })
 })
