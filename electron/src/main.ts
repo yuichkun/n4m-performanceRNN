@@ -33,11 +33,11 @@ export default class PerformanceRnn {
   hiddenState: tf.Tensor2D[] 
   lastSample: tf.Tensor<tf.Rank.R0> | null
   currentLoopId: number
-  models: Models
   currentPianoTimeSec: number
-  conditioned: boolean = false;
-  noteDensityEncoding: tf.Tensor1D;
-  pitchHistogramEncoding: tf.Tensor1D;
+  conditioned: boolean
+  noteDensityEncoding: tf.Tensor1D | null;
+  pitchHistogramEncoding: tf.Tensor1D | null;
+  models: Models
 
   /** @description
    * How many steps to generate per generateStep call.
@@ -56,13 +56,23 @@ export default class PerformanceRnn {
    * underruns, but also makes the lag from UI change to output larger.
    */
   static GENERATION_BUFFER_SECONDS = .5;
+  static DENSITY_BIN_RANGES = [1.0, 2.0, 4.0, 8.0, 16.0, 32.0, 64.0];
 
   constructor(models: Models) {
+    this.cellState = getInitialWeights(models)
+    this.hiddenState = getInitialWeights(models)
+    this.lastSample = tf.scalar(PerformanceRnn.PRIMER_IDX, 'int32');
+    this.currentLoopId = 0
+    this.currentPianoTimeSec = 0
+    this.conditioned = false
+    this.noteDensityEncoding = null
+    this.pitchHistogramEncoding = null
     this.models = models
   }
 
   async initialize() {
     this.currentLoopId = 0
+    this.updateConditioningParams()
   }
   
   resetRnn() {
@@ -99,11 +109,12 @@ export default class PerformanceRnn {
       for (let i = 0; i < PerformanceRnn.STEPS_PER_GENERATE_CALL; i++) {
         // Use last sampled output as the next input.
         const eventInput = tf.oneHot(
-          this.lastSample.as1D(), EVENT_SIZE).as1D();
+          this.lastSample!.as1D(), EVENT_SIZE).as1D(); // TODO: better not use !, rather stop using null
         // Dispose the last sample from the previous generate call, 
         // since we kept it.
-        if (i === 0) {
+        if (i === 0 && this.lastSample) {
           this.lastSample.dispose();
+          this.lastSample = null
         }
         const conditioning = this.getConditioning();
         const axis = 0;
@@ -154,6 +165,7 @@ export default class PerformanceRnn {
   getConditioning(): tf.Tensor1D {
     return tf.tidy(() => {
       const { conditioned, noteDensityEncoding, pitchHistogramEncoding } = this;
+      if(!(noteDensityEncoding && pitchHistogramEncoding)) throw new TypeError('noteDensityEncoding and pitchHistogramEncoding must be defined')
       if (!conditioned) {
         const size = 1 + (noteDensityEncoding.shape[0] as number) +
             (pitchHistogramEncoding.shape[0] as number);
@@ -167,5 +179,36 @@ export default class PerformanceRnn {
         return tf.tensor1d([0], 'int32').concat(conditioningValues, axis);
       }
     });
+  }
+
+  updateConditioningParams() {
+    const pitchHistogram = Array(12).fill(0) // TODO: make this controllable
+
+    if (this.noteDensityEncoding != null) {
+      this.noteDensityEncoding.dispose();
+      this.noteDensityEncoding = null;
+    }
+
+    const noteDensityIdx = 0; // TODO: make this controllable
+
+    this.noteDensityEncoding =
+        tf.oneHot(
+            tf.tensor1d([noteDensityIdx + 1], 'int32'),
+            PerformanceRnn.DENSITY_BIN_RANGES.length + 1).as1D();
+
+    if (this.pitchHistogramEncoding != null) {
+      this.pitchHistogramEncoding.dispose();
+      this.pitchHistogramEncoding = null;
+    }
+
+    const PITCH_HISTOGRAM_SIZE = 12;
+    const buffer = tf.buffer<tf.Rank.R1>([PITCH_HISTOGRAM_SIZE], 'float32');
+    const pitchHistogramTotal = pitchHistogram.reduce((prev, val) => {
+      return prev + val;
+    });
+    for (let i = 0; i < PITCH_HISTOGRAM_SIZE; i++) {
+      buffer.set(pitchHistogram[i] / pitchHistogramTotal, i);
+    }
+    this.pitchHistogramEncoding = buffer.toTensor();
   }
 }
