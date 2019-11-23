@@ -120,3 +120,56 @@ Object {
   },
 }
 `;
+
+exports[`App getInitialWeights  1`] = `
+Array [
+  Tensor {
+    "dataId": Object {},
+    "dtype": "float32",
+    "id": 9,
+    "isDisposedInternal": false,
+    "kept": false,
+    "rankType": "2",
+    "shape": Array [
+      1,
+      512,
+    ],
+    "size": 512,
+    "strides": Array [
+      512,
+    ],
+  },
+  Tensor {
+    "dataId": Object {},
+    "dtype": "float32",
+    "id": 10,
+    "isDisposedInternal": false,
+    "kept": false,
+    "rankType": "2",
+    "shape": Array [
+      1,
+      512,
+    ],
+    "size": 512,
+    "strides": Array [
+      512,
+    ],
+  },
+  Tensor {
+    "dataId": Object {},
+    "dtype": "float32",
+    "id": 11,
+    "isDisposedInternal": false,
+    "kept": false,
+    "rankType": "2",
+    "shape": Array [
+      1,
+      512,
+    ],
+    "size": 512,
+    "strides": Array [
+      512,
+    ],
+  },
+]
+`;

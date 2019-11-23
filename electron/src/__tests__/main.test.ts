@@ -1,9 +1,9 @@
-import App from '../main'
-import { loadModel } from '../modelLoader'
+import App, { getInitialWeights } from '../main'
+import { loadModel, Models } from '../modelLoader'
 
 describe('App', () => {
   let app: App;
-  let models: any;
+  let models: Models;
 
   beforeAll(async () => {
     models = await loadModel()
@@ -11,6 +11,13 @@ describe('App', () => {
 
   beforeEach(() => {
     app = new App(models);
+  })
+
+  describe('getInitialWeights', () => {
+    it('returns valid shape', () => {
+      const w = getInitialWeights(models)
+      expect(w).toMatchSnapshot();
+    })
   })
 
   describe('constructor', () => {
