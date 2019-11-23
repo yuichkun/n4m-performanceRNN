@@ -94,6 +94,16 @@ export default class PerformanceRnn {
   async generateStep(loopId: number) {
     
     const { lstmKernel1, lstmKernel2, lstmKernel3, lstmBias1, lstmBias2, lstmBias3 } = this.models
+    if (
+      !(
+        lstmKernel1 &&
+        lstmKernel2 &&
+        lstmKernel3 &&
+        lstmBias1 &&
+        lstmBias2 &&
+        lstmBias3
+      )
+    ) throw new TypeError('Model has invalid shape')
 
     const lstm1 = (data: tf.Tensor2D, c: tf.Tensor2D, h: tf.Tensor2D) =>
         tf.basicLSTMCell(PerformanceRnn.forgetBias, lstmKernel1, lstmBias1, data, c, h);
