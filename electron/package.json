@@ -11,6 +11,8 @@
   "author": "Yuichi Yogo",
   "license": "ISC",
   "devDependencies": {
+    "@types/jest": "^24.0.23",
+    "ts-jest": "^24.2.0",
     "ts-loader": "^5.2.1",
     "ts-node": "^8.4.1",
     "typescript": "^3.7.2",
