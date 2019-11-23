@@ -90,4 +90,15 @@ describe('App', () => {
       expect(app.pitchHistogramEncoding).not.toBeNull()
     })
   })
+  describe('generateSteps', () => {
+    beforeEach(async () => {
+      await app.initialize()
+    })
+    it('calls playOutput',  async () => {
+      const mock = jest.fn();
+      app.playOutput = mock
+      await app.generateStep(0)
+      expect(mock).toHaveBeenCalledTimes(10)
+    })
+  })
 })
