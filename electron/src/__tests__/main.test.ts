@@ -14,9 +14,19 @@ describe('App', () => {
   })
 
   describe('getInitialWeights', () => {
-    it('returns valid shape', () => {
-      const w = getInitialWeights(models)
-      expect(w).toMatchSnapshot();
+    describe('with valid models', () => {
+      it('returns valid shape', () => {
+        const w = getInitialWeights(models)
+        expect(w).toMatchSnapshot();
+      })
+    })
+    describe('with invalid models', () => {
+      it('throws', () => {
+        const invalidModels = {} as Models
+        expect(() => {
+          getInitialWeights(invalidModels)
+        }).toThrowErrorMatchingSnapshot()
+      })
     })
   })
 

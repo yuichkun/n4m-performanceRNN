@@ -121,7 +121,9 @@ Object {
 }
 `;
 
-exports[`App getInitialWeights returns valid shape 1`] = `
+exports[`App getInitialWeights with invalid models throws 1`] = `"Invalid Model shape. Model must have the following properties. lstmBias1, lstmBias2, lstmBias3"`;
+
+exports[`App getInitialWeights with valid models returns valid shape 1`] = `
 Array [
   Tensor {
     "dataId": Object {},

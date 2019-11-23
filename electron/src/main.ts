@@ -19,6 +19,7 @@ import { EVENT_SIZE } from './constants'
 
 export function getInitialWeights(models: Models): tf.Tensor<tf.Rank.R2>[]{
   const { lstmBias1, lstmBias2, lstmBias3 } = models
+  if(!(lstmBias1 && lstmBias2 && lstmBias3)) throw new TypeError('Invalid Model shape. Model must have the following properties. lstmBias1, lstmBias2, lstmBias3')
   return [
     tf.zeros([1, lstmBias1.shape[0] / 4]),
     tf.zeros([1, lstmBias2.shape[0] / 4]),
