@@ -29,6 +29,9 @@ describe('App', () => {
       expect(app.models).toBeDefined()
       expect(app.models).toMatchSnapshot()
     })
+    it('conditioned is set false', () => {
+      expect(app.conditioned).toBe(false)
+    })
   })
 
   describe('initialize', () => {

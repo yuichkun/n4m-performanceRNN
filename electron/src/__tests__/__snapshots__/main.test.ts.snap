@@ -121,7 +121,7 @@ Object {
 }
 `;
 
-exports[`App getInitialWeights  1`] = `
+exports[`App getInitialWeights returns valid shape 1`] = `
 Array [
   Tensor {
     "dataId": Object {},
