@@ -1,0 +1,3 @@
+{
+  "typescript.tsdk": "./electron/node_modules/typescript/lib"
+}
