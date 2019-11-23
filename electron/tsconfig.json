@@ -1,21 +1,32 @@
 {
   "compilerOptions": {
-    "noImplicitAny": true,
-    "module": "commonjs",
-    "removeComments": true,
-    "preserveConstEnums": true,
-    "target": "es5",
-    "lib": ["es2015", "dom"],
-    "noUnusedLocals": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "alwaysStrict": true,
-    "noUnusedParameters": false,
+    /* Basic Options */
+    // "incremental": true,                   /* Enable incremental compilation */
+    "target": "es5",                          /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019' or 'ESNEXT'. */
+    "module": "commonjs",                     /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'. */
+    "lib": ["es2015", "dom"],                             /* Specify library files to be included in the compilation. */
+    "removeComments": true,                /* Do not emit comments to output. */
+
+    /* Strict Type-Checking Options */
+    "strict": true,                           /* Enable all strict type-checking options. */
+    "alwaysStrict": true,                  /* Parse in strict mode and emit "use strict" for each source file. */
     "pretty": true,
-    "noFallthroughCasesInSwitch": true,
-    "allowUnreachableCode": false,
-    "experimentalDecorators": true,
+    "preserveConstEnums": true,
     "resolveJsonModule": true,
-    "esModuleInterop": true
+
+    /* Additional Checks */
+    "noUnusedLocals": true,                /* Report errors on unused locals. */
+    "noUnusedParameters": true,            /* Report errors on unused parameters. */
+    "noImplicitReturns": true,             /* Report error when not all code paths in function return a value. */
+    "noFallthroughCasesInSwitch": true,    /* Report errors for fallthrough cases in switch statement. */
+
+    /* Module Resolution Options */
+    "esModuleInterop": true,                  /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */
+
+    /* Experimental Options */
+    "experimentalDecorators": true,        /* Enables experimental support for ES7 decorators. */
+
+    /* Advanced Options */
+    "forceConsistentCasingInFileNames": true  /* Disallow inconsistently-cased references to the same file. */
   }
 }
