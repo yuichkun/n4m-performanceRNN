@@ -1,5 +1,6 @@
 import App, { getInitialWeights } from '../main'
 import { loadModel, Models } from '../modelLoader'
+import { MidiGateway } from '../MidiGateway'
 
 describe('App', () => {
   let app: App;
@@ -10,7 +11,8 @@ describe('App', () => {
   })
 
   beforeEach(() => {
-    app = new App(models);
+    const midiGateway = new MidiGateway()
+    app = new App({ models, midiGateway });
   })
 
   describe('getInitialWeights', () => {
@@ -47,8 +49,8 @@ describe('App', () => {
     it('currentLoopId is 0', () => {
       expect(app.currentLoopId).toBe(0)
     })
-    it('currentPianoTimeSec is 0', () => {
-      expect(app.currentPianoTimeSec).toBe(0)
+    it('currentTimeSec is 0', () => {
+      expect(app.currentTimeSec).toBe(0)
     })
     it('conditioned is set false', () => {
       expect(app.conditioned).toBe(false)
@@ -62,6 +64,10 @@ describe('App', () => {
     it('models are set', () => {
       expect(app.models).toBeDefined()
       expect(app.models).toMatchSnapshot()
+    })
+    it('activeNotes is initialized with an empty map', () => {
+      expect(app.activeNotes).toBeInstanceOf(Map)
+      expect(app.activeNotes.size).toBe(0)
     })
   })
 

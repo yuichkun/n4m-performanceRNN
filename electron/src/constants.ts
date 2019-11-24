@@ -1,15 +1,15 @@
 const MIN_MIDI_PITCH = 0;
 const MAX_MIDI_PITCH = 127;
-const VELOCITY_BINS = 32;
+export const VELOCITY_BINS = 32;
 const MAX_SHIFT_STEPS = 100;
 // const STEPS_PER_SECOND = 100;
 
-const EVENT_RANGES = [
+export const EVENT_RANGES = [
   ['note_on', MIN_MIDI_PITCH, MAX_MIDI_PITCH],
   ['note_off', MIN_MIDI_PITCH, MAX_MIDI_PITCH],
   ['time_shift', 1, MAX_SHIFT_STEPS],
   ['velocity_change', 1, VELOCITY_BINS],
-];
+] as const;
 
 function calculateEventSize(): number {
   let eventOffset = 0;
@@ -22,3 +22,6 @@ function calculateEventSize(): number {
 }
 
 export const EVENT_SIZE = calculateEventSize();
+
+export const MIDI_EVENT_ON = 0x90;
+export const MIDI_EVENT_OFF = 0x80;
